@@ -1,2 +1,2 @@
 pub mod ascii;
-pub mod img_proc;
+pub mod image_proc;
