@@ -1,4 +1,4 @@
-use std::{error::Error, io, sync::mpsc::Receiver};
+use std::{error::Error, io};
 
 use ansi_term::Color;
 use image::{DynamicImage, Rgba};
@@ -63,20 +63,48 @@ impl<'a> ImageEngine<'a> {
         Ok(())
     }
 
-    // pub fn render_to_image(
-    //     &self,
-    //     path: String,
-    //     width: Option<u32>,
-    //     height: Option<u32>,
-    // ) -> Result<(), Box<dyn Error>> {
-    //     let (width, height) = self.calculate_dimensions(width, height);
-    //     let mut new_image = image::RgbaImage::new(width, height);
-    //
-    //     new_image.put_pixel(x, y, pixel);
-    //     Ok(())
-    // }
+    pub fn get_ascii_as_string(
+        &self,
+        width: Option<u32>,
+        height: Option<u32>,
+    ) -> Result<String, Box<dyn Error>> {
+        let (width, height) = self.calculate_dimensions(width, height);
+        let image = self.source.thumbnail_exact(width, height).to_rgba8();
 
-    // fn channel_process(&self, width: u32, height: u32) -> Receiver<_> {}
+        let mut output = String::new();
+        let mut prev_color: Option<Color> = None;
+        let mut current_line = 0;
+
+        let maximum = image
+            .pixels()
+            .fold(0.0, |acc, pixel| self.get_grayscale_pixel(pixel).max(acc));
+
+        for (_, line, pixel) in image.enumerate_pixels() {
+            if current_line < line {
+                current_line = line;
+                if let Some(color) = prev_color {
+                    output.push_str(&format!("{}", color.suffix()));
+                    prev_color = None;
+                };
+                output.push('\n');
+            }
+
+            let color = Color::RGB(pixel[0], pixel[1], pixel[2]);
+            if prev_color != Some(color) {
+                output.push_str(&format!("{}", color.prefix()));
+            }
+            prev_color = Some(color);
+
+            let char_for_pixel = self.get_char_for_pixel(pixel, 0, maximum);
+            output.push_str(&format!("{char_for_pixel}"));
+        }
+
+        if let Some(color) = prev_color {
+            output.push_str(&format!("{}", color.prefix()));
+        }
+
+        Ok(output)
+    }
 
     fn get_char_for_pixel(&self, pixel: &Rgba<u8>, alpha_threshold: u8, maximum: f64) -> char {
         let gray_scale = self.get_grayscale_pixel(pixel) / maximum;
