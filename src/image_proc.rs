@@ -1,21 +1,31 @@
 use std::{error::Error, io};
 
 use ansi_term::Color;
-use image::{DynamicImage, Rgba};
+use image::DynamicImage;
+use image::Rgba;
 
 use crate::ascii::DEFAULT;
 
-pub struct ImageEngine<'a> {
-    source: &'a DynamicImage,
+pub struct ImageEngine {
+    source: DynamicImage,
     edge_map: Option<Vec<(u8, u8)>>,
 }
 
-impl<'a> ImageEngine<'a> {
+impl<'a> ImageEngine {
     pub fn new(source: &'a DynamicImage) -> Self {
         Self {
-            source,
+            source: source.clone(),
             edge_map: None, // TODO: Implement edge detection
         }
+    }
+
+    pub fn from_slice(source: Vec<u8>) -> Result<Self, Box<dyn Error>> {
+        let image = image::load_from_memory(&source)?;
+
+        Ok(Self {
+            source: image,
+            edge_map: None,
+        })
     }
 
     pub fn render_to_text(
