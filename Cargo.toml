@@ -6,4 +6,3 @@ edition = "2021"
 [dependencies]
 ansi_term = "0.12.1"
 image = "0.25.2"
-rusttype = "0.9.3"
