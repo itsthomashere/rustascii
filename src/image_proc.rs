@@ -19,8 +19,8 @@ impl<'a> ImageEngine {
         }
     }
 
-    pub fn from_slice(source: Vec<u8>) -> Result<Self, Box<dyn Error>> {
-        let image = image::load_from_memory(&source)?;
+    pub fn from_slice(source: &[u8]) -> Result<Self, Box<dyn Error>> {
+        let image = image::load_from_memory(source)?;
 
         Ok(Self {
             source: image,
