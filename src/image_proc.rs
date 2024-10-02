@@ -1,6 +1,7 @@
 use std::{error::Error, io};
 
 use ansi_term::Color;
+use image::imageops::FilterType;
 use image::DynamicImage;
 use image::Rgba;
 
@@ -8,6 +9,7 @@ use crate::ascii::DEFAULT;
 
 pub struct ImageEngine {
     source: DynamicImage,
+    #[allow(unused)]
     edge_map: Option<Vec<(u8, u8)>>,
 }
 
@@ -35,7 +37,10 @@ impl<'a> ImageEngine {
         height: Option<u32>,
     ) -> io::Result<()> {
         let (width, height) = self.calculate_dimensions(width, height);
-        let image = self.source.thumbnail_exact(width, height).to_rgba8();
+        let image = self
+            .source
+            .resize_exact(width, height, FilterType::Nearest)
+            .to_rgba8();
 
         let mut prev_color: Option<Color> = None;
         let mut current_line = 0;
@@ -79,7 +84,10 @@ impl<'a> ImageEngine {
         height: Option<u32>,
     ) -> Result<String, Box<dyn Error>> {
         let (width, height) = self.calculate_dimensions(width, height);
-        let image = self.source.thumbnail_exact(width, height).to_rgba8();
+        let image = self
+            .source
+            .resize_exact(width, height, FilterType::Nearest)
+            .to_rgba8();
 
         let mut output = String::new();
         let mut prev_color: Option<Color> = None;
