@@ -39,15 +39,19 @@ fn parse_arguments() -> Result<Arguments, String> {
         } else if arg.starts_with("--height=") {
             height = Some(parse_height(arg)?);
             continue;
-        } else if arg.starts_with("/") {
+        } else if arg.starts_with(['/', '\\', '.']) {
             path = Some(PathBuf::from_str(&arg).map_err(|_| "Invalid path".to_string())?);
         } else {
             return Err("Invalid arguments".to_string());
         }
     }
 
+    if path.is_none() {
+        return Err("Invalid path".to_string());
+    }
+
     Ok(Arguments {
-        path: path.expect("Invalid path"),
+        path: path.unwrap(),
         width,
         height,
     })
