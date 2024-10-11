@@ -65,7 +65,7 @@ impl<'a> ImageEngine {
             }
             prev_color = Some(color);
 
-            let char_for_pixel = self.get_char_for_pixel(pixel, 0, maximum);
+            let char_for_pixel = self.get_char_for_pixel(pixel, 60, maximum);
             write!(writer, "{char_for_pixel}")?;
         }
 
@@ -113,7 +113,7 @@ impl<'a> ImageEngine {
             }
             prev_color = Some(color);
 
-            let char_for_pixel = self.get_char_for_pixel(pixel, 0, maximum);
+            let char_for_pixel = self.get_char_for_pixel(pixel, 60, maximum);
             output.push_str(&format!("{char_for_pixel}"));
         }
 
