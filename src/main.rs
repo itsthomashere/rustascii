@@ -1,74 +1,45 @@
-use std::env::args;
 use std::error::Error;
+use std::fs;
+use std::io::stdout;
+use std::path::PathBuf;
 use std::str::FromStr;
-use std::{
-    fs,
-    io::{self},
-    path::PathBuf,
-};
 
-use rustascii::image_proc::ImageEngine;
+use clap::Parser;
+
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+struct Arguments {
+    #[arg(short, long)]
+    width: Option<u32>,
+
+    #[arg(short, long)]
+    height: Option<u32>,
+
+    #[arg(short, long)]
+    threshold: Option<u8>,
+
+    path: String,
+}
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let args = parse_arguments()?;
+    let arguments = Arguments::parse();
 
-    let mut writer = io::stdout();
+    let width = arguments.width;
+    let height = arguments.height;
+    if width.is_none() && height.is_none() {
+        return Err("either width or height must be set".into());
+    }
+    let threshold = arguments.threshold.unwrap_or_default();
 
-    let data = fs::read(args.path)?;
+    let path = PathBuf::from_str(&arguments.path)?;
 
-    let engine = ImageEngine::from_slice(&data)?;
-    engine.render_to_text(&mut writer, args.width, args.height)?;
+    let data = fs::read(path)?;
+
+    let image_engine = rustascii::image_proc::ImageEngine::from_slice(&data)?;
+
+    let mut writer = stdout();
+
+    image_engine.render_to_text(&mut writer, threshold, width, height)?;
 
     Ok(())
-}
-
-struct Arguments {
-    path: PathBuf,
-    width: Option<u32>,
-    height: Option<u32>,
-}
-
-fn parse_arguments() -> Result<Arguments, String> {
-    let mut height: Option<u32> = None;
-    let mut width: Option<u32> = None;
-    let mut path: Option<PathBuf> = None;
-    for arg in args().skip(1).take(3) {
-        if arg.starts_with("--width=") {
-            width = Some(parse_width(arg)?);
-            continue;
-        } else if arg.starts_with("--height=") {
-            height = Some(parse_height(arg)?);
-            continue;
-        } else if arg.starts_with(['/', '\\', '.']) {
-            path = Some(PathBuf::from_str(&arg).map_err(|_| "Invalid path".to_string())?);
-        } else {
-            return Err("Invalid arguments".to_string());
-        }
-    }
-
-    if path.is_none() {
-        return Err("Invalid path".to_string());
-    }
-
-    Ok(Arguments {
-        path: path.unwrap(),
-        width,
-        height,
-    })
-}
-
-fn parse_width(arg: String) -> Result<u32, String> {
-    arg.strip_prefix("--width=")
-        .unwrap()
-        .trim()
-        .parse::<u32>()
-        .map_err(|_| "invalid width".to_string())
-}
-
-fn parse_height(arg: String) -> Result<u32, String> {
-    arg.strip_prefix("--height=")
-        .unwrap()
-        .trim()
-        .parse::<u32>()
-        .map_err(|_| "invalid width".to_string())
 }
