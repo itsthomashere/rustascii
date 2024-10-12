@@ -674,6 +674,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "rascii"
+version = "0.1.1"
+dependencies = [
+ "ansi_term",
+ "image",
+]
+
+[[package]]
 name = "rav1e"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -749,14 +757,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57397d16646700483b67d2dd6511d79318f9d057fdbd21a4066aeac8b41d310a"
 dependencies = [
  "bytemuck",
-]
-
-[[package]]
-name = "rustascii"
-version = "0.1.0"
-dependencies = [
- "ansi_term",
- "image",
 ]
 
 [[package]]
