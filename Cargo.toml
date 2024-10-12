@@ -1,8 +1,9 @@
 [package]
-name = "rascii"
+name = "ascii-rs"
 description = "Process image into colored-ascii image"
 version = "0.1.1"
 edition = "2021"
+license = "MIT"
 
 [dependencies]
 ansi_term = "0.12.1"
