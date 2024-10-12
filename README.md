@@ -46,4 +46,4 @@ fn main() -> Result<(), Box<dyn Error>> {
 ![Origin Image](./assets/charizard.jpg)
 
 - Rendered
-- ![Rendered Image](./assets/charizard-ascii.png
+- ![Rendered Image](./assets/charizard-ascii.png)
