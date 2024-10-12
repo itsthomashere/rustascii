@@ -41,6 +41,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
+## CLI
+- CLI version is availabe on `cargo`
+- Install the cli by
+`
+    cargo install rascii-cli
+`
+- And run `rascii-cli --help` on how to use the CLI
+
 # Demo
 - Origin 
 ![Origin Image](./assets/charizard.jpg)
