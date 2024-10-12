@@ -1,8 +1,10 @@
 [package]
-name = "rustascii-cli"
-version = "0.1.0"
+name = "rascii-cli"
+description = "CLI tool for ascii-rs image rendering"
+version = "0.1.1"
 edition = "2021"
+license = "MIT"
 
 [dependencies]
+ascii-rs = "0.1.1"
 clap = { version = "4.5.20", features = ["derive"] }
-rustascii = { git = "https://github.com/itsthomashere/rustascii"}

@@ -108,6 +108,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
 
 [[package]]
+name = "ascii-rs"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "59146b6688b3d867b31230fb745abdc72b508383383bb8cd5d9113fdb6e04eea"
+dependencies = [
+ "ansi_term",
+ "image",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -853,20 +863,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustascii"
-version = "0.1.0"
-source = "git+https://github.com/itsthomashere/rustascii#5face06471baa9c7a3a39386b274fef24fb71ece"
-dependencies = [
- "ansi_term",
- "image",
-]
-
-[[package]]
 name = "rustascii-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
+ "ascii-rs",
  "clap",
- "rustascii",
 ]
 
 [[package]]

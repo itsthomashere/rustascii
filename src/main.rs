@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let data = fs::read(path)?;
 
-    let image_engine = rustascii::image_proc::ImageEngine::from_slice(&data)?;
+    let image_engine = ascii_rs::image_proc::ImageEngine::from_slice(&data)?;
 
     let mut writer = stdout();
 
